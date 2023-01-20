@@ -4,6 +4,8 @@ Install virtualenv
 
 py -m pip install --user virtualenv
 
+pip freeze > requirements.txt
+
 Create and activate Vistual Environment
 
 py -m venv env
