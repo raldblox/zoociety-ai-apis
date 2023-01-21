@@ -72,3 +72,27 @@ def chat(prompt: str):
     print(output.content)
 
     return output.content
+
+
+@app.get("/anime")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/hakurei/waifu-diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/cyberpunk")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/DGSpitzer/Cyberpunk-Anime-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
