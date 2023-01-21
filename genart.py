@@ -35,7 +35,7 @@ API_URL = "https://api-inference.huggingface.co/models/dreamlike-art/dreamlike-p
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
 
-@app.get("/promptizer")
+@app.get("/promptimize")
 def chat(prompt: str):
 
     output = requests.request(
