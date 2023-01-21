@@ -5,6 +5,7 @@ from fastapi.responses import StreamingResponse
 from io import BytesIO
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
 
 origins = [
@@ -56,3 +57,18 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/dialogue")
+def chat(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    print(output.content)
+
+    return output.content
