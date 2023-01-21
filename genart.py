@@ -74,6 +74,21 @@ def chat(prompt: str):
     return output.content
 
 
+@app.get("/chat")
+def chat(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    print(output.content)
+
+    return output.content
+
+
 @app.get("/anime")
 def generate(prompt: str):
     output = requests.request(
