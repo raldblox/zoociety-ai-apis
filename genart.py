@@ -35,28 +35,19 @@ API_URL = "https://api-inference.huggingface.co/models/dreamlike-art/dreamlike-p
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
 
-@app.get("/photoreal")
-def generate(prompt: str):
+@app.get("/promptizer")
+def chat(prompt: str):
+
     output = requests.request(
         "POST",
-        "https://api-inference.huggingface.co/models/dreamlike-art/dreamlike-photoreal-2.0",
+        "https://api-inference.huggingface.co/models/microsoft/Promptist",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
         data=json.dumps(prompt),
     )
 
-    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+    print(output.content)
 
-
-@app.get("/diffusion")
-def generate(prompt: str):
-    output = requests.request(
-        "POST",
-        "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
-        headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
-    )
-
-    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+    return output.content
 
 
 @app.get("/dialogue")
@@ -118,6 +109,30 @@ def generate(prompt: str):
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/yehiaserag/anime-pencil-diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/genart")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/photoreal")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/dreamlike-art/dreamlike-photoreal-2.0",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
         data=json.dumps(prompt),
     )
