@@ -138,3 +138,15 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/tts")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/facebook/fastspeech2-en-ljspeech",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="audio/flac")
