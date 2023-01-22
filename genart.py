@@ -162,3 +162,15 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/animepro")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/andite/anything-v4.0",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
