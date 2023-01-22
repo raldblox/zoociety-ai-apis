@@ -174,3 +174,27 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/animepro2")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/gsdf/Counterfeit-V2.0",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/illustrate")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/WarriorMama777/OrangeMixs",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
