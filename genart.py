@@ -150,3 +150,15 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="audio/flac")
+
+
+@app.get("/diffuse2")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
