@@ -79,6 +79,37 @@ def chat(prompt: str):
 
     return output.content
 
+# TEXT MASKING
+@app.get("/bert")
+def mask(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/bert-large-cased-whole-word-masking",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    print(output.content)
+
+    return output.content
+
+
+# IMAGE CAPTIONING
+@app.get("/caption")
+def mask(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    print(output.content)
+
+    return output.content
+
 
 @app.get("/anime")
 def generate(prompt: str):
