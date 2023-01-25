@@ -80,6 +80,8 @@ def chat(prompt: str):
     return output.content
 
 # TEXT MASKING
+
+
 @app.get("/bert")
 def mask(prompt: str):
 
@@ -147,18 +149,6 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
-@app.get("/genart")
-def generate(prompt: str):
-    output = requests.request(
-        "POST",
-        "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
-        headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
-    )
-
-    return StreamingResponse(BytesIO(output.content), media_type="image/png")
-
-
 @app.get("/photoreal")
 def generate(prompt: str):
     output = requests.request(
@@ -183,7 +173,19 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="audio/flac")
 
 
-@app.get("/diffuse2")
+@app.get("/image")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/imagepro")
 def generate(prompt: str):
     output = requests.request(
         "POST",
