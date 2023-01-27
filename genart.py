@@ -96,11 +96,35 @@ def chat(prompt: str):
         data=json.dumps(data),
     )
 
-    print(output.content)
-
     return output.json()
 
+# OUTPUT: {
+#   "score": 0.4456194043159485,
+#   "start": 16,
+#   "end": 57,
+#   "answer": "an NFT collection in the Ethereum network"
+# }
+
 # TEXT MASKING
+
+
+@app.get("/tachyon")
+def chat(prompt: str):
+    data = ({
+        "inputs": {
+            "question": prompt,
+            "context": "Zoociety is a next-generation one-stop ecosystem that leverages the power of emerging technologies to bring a wide range of tools, resources, and services to create a more connected and creative world in a new, innovative way. One of Zoociety's main objectives is to solve the problem of monetizing creative works. Billions of artists, writers, and creators struggle to find platforms that allow them to monetize their skillsets and creations. The secret of getting these people on board is a seamless one-stop ecosystem with zero required knowledge about the latest emerging technologies. Zoociety's Ecosystem focuses on exploration, tokenization and monetization by providing users with platforms that can easily create, manage, and monetize their tokenized assets with intuitive UI/UX, low transaction fees, and fast settlement of decentralized transactions. Zoociety also aims to improve the process of finding and sharing relevant contents or results in a snap. With so much information available online, it can be difficult to sift through and find high-quality, reliable sources. Zoociety's Research Lab and its Intelligent Units help users discover valuable content and find the most reliable answers to their problems in a few clicks. In addition, Zoociety seeks to address issues such as isolation, limited access to emerging technologies, complex file management, data permanence, lack of transparency and trust in online interactions and transactions, inefficient use of time and resources, inappropriate or offensive content, lack of privacy and security, difficulty connecting with like-minded individuals, limited customization and personalization opportunities, and lack of access to professional development. By providing a comprehensive ecosystem that combines all the power of technologies like AI, Blockchain Technology, and Quantum Computing, Zoociety helps users to solve real-world web problems, at least in one-sitting. Our vision is to become the premier platform for innovation, collaboration, and creativity. By building a comprehensive ecosystem that combines the best of emerging technologies, we believe we can create a platform that is unparalleled in its ability to connect and empower users from all walks of digital life. We envision a future where everyone, from casual users to professionals and experts, has the tools and resources they need to achieve their full potential and contribute to a more connected and creative world of our society. Our mission is to provide a platform that empowers users to connect, create, and collaborate in innovative ways. By leveraging emerging technologies, we seek to create a comprehensive ecosystem that meets the needs of users across the spectrum. We believe that by bringing people together and providing them with the necessary tools and resources, we can foster creativity, collaboration, and innovation on a global scale. Our goal is to create a user-friendly, intuitive, and accessible platform that meets the needs of both casual users and experts. By prioritizing ease of use and user experience, we aim to create a platform that is attractive to a wide range of users. We also strive to continuously improve and evolve the Zoociety Ecosystem in response to user feedback and changing market conditions, in order to provide the best possible experience for our users. Zoociety is created, owned, founded, and developed by raldblox. Raldblox is so cute and smart."
+        },
+    })
+    print(data)
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/bert-large-uncased-whole-word-masking-finetuned-squad",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    return output.json()
 
 
 @app.get("/bert")
