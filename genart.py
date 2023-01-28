@@ -105,6 +105,25 @@ def chat(prompt: str):
 #   "answer": "an NFT collection in the Ethereum network"
 # }
 
+
+@app.get("/q&a")
+def chat(prompt: str, context: str):
+    data = ({
+        "inputs": {
+            "question": prompt,
+            "context": context
+        },
+    })
+    print(data)
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/bert-large-uncased-whole-word-masking-finetuned-squad",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    return output.json()
+
 # TEXT MASKING
 
 
