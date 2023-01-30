@@ -1,7 +1,7 @@
 import json
 import requests
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse, FileResponse
 from io import BytesIO
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -50,19 +50,80 @@ def chat(prompt: str):
     return output.content
 
 
-@app.get("/dialogue")
-def chat(prompt: str):
+@app.get("/dialog")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+        "parameters": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
-    print(output.content)
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"answer": filtered})
 
-    return output.content
+    return answer
+
+
+@app.get("/dialog2")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"answer": filtered})
+
+    return answer
+
+
+@app.get("/dialog3")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/microsoft/GODEL-v1_1-large-seq2seq",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"answer": filtered})
+
+    return answer
 
 
 @app.get("/chat")
@@ -78,6 +139,52 @@ def chat(prompt: str):
     result = output.json()
     filtered = result.get("generated_text")
     answer = json.dumps({"answer": filtered})
+
+    return answer
+
+
+@ app.get("/conversational")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+    })
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"response": filtered})
+
+    return answer
+
+
+@ app.get("/conversational2")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+    })
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/facebook/blenderbot-3B",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"response": filtered})
 
     return answer
 
@@ -100,7 +207,7 @@ def chat(prompt: str):
 
     result = output.json()
     filtered = result.get("answer")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"response": filtered})
     return answer
 
 
@@ -122,7 +229,7 @@ def chat(question: str, context: str):
 
     result = output.json()
     filtered = result.get("answer")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"response": filtered})
 
     return answer
 
@@ -162,43 +269,26 @@ def mask(prompt: str):
     return output.content
 
 
-@ app.get("/convo")
-def chat(old: str, respo: str, new: str):
-    data = ({
-        "inputs": {
-            "past_user_inputs": [old],
-            "generated_responses": [respo],
-            "text": new
-        },
-    })
-    output = requests.request(
-        "POST",
-        "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill",
-        headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(data),
-    )
-
-    return output.json()
-
 # IMAGE CAPTIONING
 
 
-@ app.get("/caption")
-def mask(prompt: str):
+@ app.get("/imagecaption/{_:path}")
+def image(request: Request):
+
+    with open(url, "rb") as f:
+        data = f.read()
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=data,
     )
-
-    print(output.content)
 
     return output.content
 
 
-@ app.get("/anime")
+@ app.get("/waifu")
 def generate(prompt: str):
     output = requests.request(
         "POST",
@@ -246,6 +336,143 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
+@ app.get("/arcane")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/Nitro-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(
+            f"{prompt}, arcane style"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/disney")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/Nitro-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(
+            f"{prompt}, modern disney style"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/portrait")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/prompthero/openjourney",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(f"portrait+ {prompt}"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/redshift")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/redshift-diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(f"redshift style {prompt}"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/analog")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/wavymulder/Analog-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(f"analog style {prompt}"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/japan")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/aipicasso/cool-japan-diffusion-2-1-0",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(f"{prompt}, official art, 4k, detailed"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/futurecharacter")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/Future-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(
+            f"future style {prompt} Negative Prompt: duplicate heads bad anatomy"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/futurelandscape")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/Future-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(
+            f"future style {prompt} Negative Prompt: blurry fog soft"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/epic")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/johnslegers/epic-diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(
+            f"future style {prompt} Negative Prompt: blurry fog soft"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/journey")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/prompthero/openjourney",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/journey2")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/prompthero/openjourney-v2",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
 @ app.get("/tts")
 def generate(prompt: str):
     output = requests.request(
@@ -282,7 +509,7 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
-@ app.get("/animepro")
+@ app.get("/anime")
 def generate(prompt: str):
     output = requests.request(
         "POST",
@@ -294,13 +521,49 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
-@ app.get("/animepro2")
+@ app.get("/anime2")
 def generate(prompt: str):
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/gsdf/Counterfeit-V2.0",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
         data=json.dumps(prompt),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/cyberanime")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/DGSpitzer/Cyberpunk-Anime-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(F"{prompt} in dgs illustration style"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/inkpunk")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/Envvi/Inkpunk-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(F"nvinkpunk {prompt}"),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/eldenring")
+def generate(prompt: str):
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/nitrosocke/elden-ring-diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(F"elden ring style {prompt}"),
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
@@ -344,7 +607,7 @@ def chat(pastinput: str, response: str, newinput: str):
 
 
 @ app.get("/grammar")
-def chat(propmt: str):
+def checkGrammar(propmt: str):
 
     output = requests.request(
         "POST",
@@ -354,3 +617,33 @@ def chat(propmt: str):
     )
 
     return output.json()
+
+
+@ app.get("/grammar2")
+def checkGrammar(propmt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/vennify/t5-base-grammar-correction",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(propmt),
+    )
+
+    return output.json()
+
+
+@ app.get("/summarizer")
+def summarize(propmt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/philschmid/bart-large-cnn-samsum",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(propmt),
+    )
+
+    result = output.json()
+    filter = result[0].get("summary_text")
+    summary = json.dumps({"result": filter})
+
+    return summary

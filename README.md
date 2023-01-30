@@ -12,7 +12,16 @@ py -m venv env
 
 .\env\Scripts\activate
 
-uvicorn genart:app --reload
+uvicorn zoociety:app --reload
 
 # docs# -- swaggerui
 # redoc -- response
+
+conversational
+return the `response`
+
+art generation
+return the `image`
+
+summarization
+return the `summary`
