@@ -319,9 +319,9 @@ def generate(prompt: str):
 def chat(newinput: str, response: str, pastinput: str):
     data = ({
         "inputs": {
-            "past_user_inputs": [newinput],
+            "past_user_inputs": [pastinput],
             "generated_responses": [response],
-            "text": pastinput
+            "text": newinput
         },
     })
     print(data)
