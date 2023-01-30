@@ -316,7 +316,7 @@ def generate(prompt: str):
 
 
 @app.get("/zgptv1")
-def chat(newinput: str, response: str, pastinput: str):
+def chat(pastinput: str, response: str, newinput: str):
     data = ({
         "inputs": {
             "past_user_inputs": [pastinput],
