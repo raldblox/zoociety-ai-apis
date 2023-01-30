@@ -320,7 +320,7 @@ def chat(pastinput: str, response: str, newinput: str):
     data = ({
         "inputs": {
             "past_user_inputs": [pastinput],
-            "generated_responses": [response],
+            "generated_responses": [f"My name is Tachyon. {response}"],
             "text": newinput
         },
     })
