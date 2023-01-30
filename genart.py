@@ -313,3 +313,23 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@app.get("/zgptv1")
+def chat(newinput: str, response: str, pastinput: str):
+    data = ({
+        "inputs": {
+            "past_user_inputs": [newinput],
+            "generated_responses": [response],
+            "text": pastinput
+        },
+    })
+    print(data)
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    return output.json()
