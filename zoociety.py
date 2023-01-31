@@ -47,7 +47,7 @@ def chat(prompt: str):
 
     result = output.json()
     filtered = result[0].get("generated_text")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
