@@ -45,9 +45,11 @@ def chat(prompt: str):
         data=json.dumps(prompt),
     )
 
-    print(output.content)
+    result = output.json()
+    filtered = result[0].get("generated_text")
+    answer = json.dumps({"answer": filtered})
 
-    return output.content
+    return answer
 
 
 @app.get("/dialog")
