@@ -55,8 +55,8 @@ def chat(prompt: str):
 
 
 @ app.get("/imagecaption")
-def image(url: str):
-    img = urlopen(url).read()
+def image(propmt: str):
+    img = urlopen(propmt).read()
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
@@ -70,6 +70,7 @@ def image(url: str):
 
     return caption
 
+
 @ app.get("/grammar")
 def checkGrammar(propmt: str):
 
@@ -80,7 +81,11 @@ def checkGrammar(propmt: str):
         data=json.dumps(propmt),
     )
 
-    return output.json()
+    result = output.json()
+    filter = result[0].get("generated_text")
+    caption = json.dumps({"result": filter})
+
+    return caption
 
 
 @ app.get("/grammar2")
@@ -93,7 +98,11 @@ def checkGrammar(propmt: str):
         data=json.dumps(propmt),
     )
 
-    return output.json()
+    result = output.json()
+    filter = result[0].get("generated_text")
+    caption = json.dumps({"result": filter})
+
+    return caption
 
 
 @ app.get("/summarizer")
@@ -111,7 +120,6 @@ def summarize(propmt: str):
     summary = json.dumps({"result": filter})
 
     return summary
-
 
 
 # @ app.get("/photoshop")
@@ -150,7 +158,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -175,7 +183,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -200,7 +208,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -217,7 +225,7 @@ def chat(prompt: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"answer": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -240,7 +248,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"response": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -263,7 +271,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     result = output.json()
     filtered = result.get("generated_text")
-    answer = json.dumps({"response": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -287,7 +295,7 @@ def chat(prompt: str):
 
     result = output.json()
     filtered = result.get("answer")
-    answer = json.dumps({"response": filtered})
+    answer = json.dumps({"result": filtered})
     return answer
 
 
@@ -310,7 +318,7 @@ def chat(question: str, context: str):
 
     result = output.json()
     filtered = result.get("answer")
-    answer = json.dumps({"response": filtered})
+    answer = json.dumps({"result": filtered})
 
     return answer
 
@@ -736,6 +744,7 @@ def generate(prompt: str):
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
+
 @ app.get("/pastel")
 def generate(prompt: str):
     data = {
@@ -775,5 +784,3 @@ def chat(pastinput: str, response: str, newinput: str):
     # return answer
 
     return output.json()
-
-
