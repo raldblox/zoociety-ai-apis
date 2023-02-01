@@ -122,6 +122,40 @@ def summarize(prompt: str):
     return summary
 
 
+@ app.get("/paraphrase")
+def paraphrase(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/prithivida/parrot_paraphraser_on_T5",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    result = output.json()
+    filter = result[0].get("generated_text")
+    summary = json.dumps({"result": filter})
+
+    return summary
+
+
+@ app.get("/autocomplete")
+def gpt(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/EleutherAI/gpt-j-6B",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    result = output.json()
+    filter = result[0].get("generated_text")
+    summary = json.dumps({"result": filter})
+
+    return summary
+
+
 # @ app.get("/photoshop")
 # def image(url: str):
 #     img = urlopen(url).read()
