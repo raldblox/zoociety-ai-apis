@@ -55,8 +55,8 @@ def chat(prompt: str):
 
 
 @ app.get("/imagecaption")
-def image(propmt: str):
-    img = urlopen(propmt).read()
+def image(prompt: str):
+    img = urlopen(prompt).read()
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
