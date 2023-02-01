@@ -72,13 +72,13 @@ def image(prompt: str):
 
 
 @ app.get("/grammar")
-def checkGrammar(propmt: str):
+def checkGrammar(prompt: str):
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/pszemraj/flan-t5-large-grammar-synthesis",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(propmt),
+        data=json.dumps(prompt),
     )
 
     result = output.json()
@@ -89,13 +89,13 @@ def checkGrammar(propmt: str):
 
 
 @ app.get("/grammar2")
-def checkGrammar(propmt: str):
+def checkGrammar(prompt: str):
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/vennify/t5-base-grammar-correction",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(propmt),
+        data=json.dumps(prompt),
     )
 
     result = output.json()
@@ -106,13 +106,13 @@ def checkGrammar(propmt: str):
 
 
 @ app.get("/summarizer")
-def summarize(propmt: str):
+def summarize(prompt: str):
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/philschmid/bart-large-cnn-samsum",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(propmt),
+        data=json.dumps(prompt),
     )
 
     result = output.json()
