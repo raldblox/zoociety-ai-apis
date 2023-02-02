@@ -41,12 +41,16 @@ headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
 @app.get("/promptimize")
 def chat(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/microsoft/Promptist",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -77,12 +81,16 @@ def image(prompt: str):
 
 @ app.get("/grammar")
 def checkGrammar(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/pszemraj/flan-t5-large-grammar-synthesis",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -92,14 +100,41 @@ def checkGrammar(prompt: str):
     return caption
 
 
+@ app.get("/grammarquality")
+def checkGrammar(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/textattack/roberta-base-CoLA",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filter = result[0]
+    positive = filter[0].get("score")
+    negative = filter[1].get("score")
+    newdata = json.dumps({"positive": positive, "negative":  negative})
+
+    return newdata
+
+
 @ app.get("/grammar2")
 def checkGrammar(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/vennify/t5-base-grammar-correction",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -111,12 +146,16 @@ def checkGrammar(prompt: str):
 
 @ app.get("/summarizer")
 def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/philschmid/bart-large-cnn-samsum",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -126,14 +165,86 @@ def summarize(prompt: str):
     return summary
 
 
+@ app.get("/classify")
+def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/Jean-Baptiste/roberta-large-ner-english",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    # filter = result[0].get("summary_text")
+    # summary = json.dumps({"result": filter})
+
+    return result
+
+
+@ app.get("/finsentiment")
+def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/ProsusAI/finbert",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filter = result[0]
+    positive = filter[0].get("score")
+    neutral = filter[1].get("score")
+    negative = filter[2].get("score")
+
+    newdata = json.dumps(
+        {"positive": positive, "nuetral": neutral, "negative":  negative})
+
+    return newdata
+
+
+@ app.get("/langdetect")
+def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/papluca/xlm-roberta-base-language-detection",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    # filter = result[0].get("summary_text")
+    # summary = json.dumps({"result": filter})
+
+    return result
+
+
 @ app.get("/linesummary")
 def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/snrspeaks/t5-one-line-summary",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -145,12 +256,16 @@ def summarize(prompt: str):
 
 @ app.get("/headline")
 def summarize(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/Michau/t5-base-en-generate-headline",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -162,12 +277,16 @@ def summarize(prompt: str):
 
 @ app.get("/paraphrase")
 def paraphrase(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/prithivida/parrot_paraphraser_on_T5",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -179,12 +298,16 @@ def paraphrase(prompt: str):
 
 @ app.get("/autocomplete")
 def gpt(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/EleutherAI/gpt-j-6B",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -287,12 +410,16 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
 @app.get("/chat")
 def chat(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
 
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large",
         headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(prompt),
+        data=json.dumps(data),
     )
 
     result = output.json()
@@ -380,7 +507,7 @@ def chat(question: str, context: str):
         },
         "options": {"wait_for_model": True},
     })
-    print(data)
+
     output = requests.request(
         "POST",
         "https://api-inference.huggingface.co/models/bert-large-uncased-whole-word-masking-finetuned-squad",
@@ -721,6 +848,29 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
+@ app.get("/variation")
+def generate(prompt: str):
+    img = urlopen(prompt).read()
+    img64 = base64.b64encode(img).decode('utf-8')
+
+    data = {
+        "inputs": [img64],
+        "options": {"wait_for_model": True},
+    }
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/lambdalabs/sd-image-variations-diffusers",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    print(output.content)
+
+    return output
+
+    # return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
 @ app.get("/anime")
 def generate(prompt: str):
     data = {
@@ -801,6 +951,22 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
+@ app.get("/coloringbook")
+def generate(prompt: str):
+    data = {
+        "inputs": f"{prompt} COLR_001, (((white background))), coloring book, line art, high resolution, black and white, colorless Negative: ((watermark)), (text), color, shading, gradient, shadows, transparency, noisy, blurred",
+        "options": {"wait_for_model": True},
+    }
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/sd-concepts-library/color-page",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
 @ app.get("/illustrate")
 def generate(prompt: str):
     data = {
@@ -858,28 +1024,3 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
-
-
-@ app.get("/taylor")
-def chat(pastinput: str, response: str, newinput: str):
-    data = ({
-        "inputs": {
-            "past_user_inputs": [f"{pastinput}"],
-            "generated_responses": [f"{response}"],
-            "text": newinput
-        },
-    })
-    print(data)
-    output = requests.request(
-        "POST",
-        "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill",
-        headers={"Authorization": f"Bearer {API_TOKEN}"},
-        data=json.dumps(data),
-    )
-
-    # result = output.json()
-    # filtered = result.get("answer")
-    # answer = json.dumps({"answer": filtered})
-    # return answer
-
-    return output.json()
