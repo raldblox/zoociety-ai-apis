@@ -143,6 +143,23 @@ def summarize(prompt: str):
     return summary
 
 
+@ app.get("/headline")
+def summarize(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/Michau/t5-base-en-generate-headline",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    result = output.json()
+    filter = result[0].get("generated_text")
+    summary = json.dumps({"result": filter})
+
+    return summary
+
+
 @ app.get("/paraphrase")
 def paraphrase(prompt: str):
 
