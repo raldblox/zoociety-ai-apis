@@ -66,6 +66,8 @@ def image(prompt: str):
         data=img,
     )
 
+    print(output)
+
     result = output.json()
     filter = result[0].get("generated_text")
     caption = json.dumps({"result": filter})
@@ -119,6 +121,23 @@ def summarize(prompt: str):
 
     result = output.json()
     filter = result[0].get("summary_text")
+    summary = json.dumps({"result": filter})
+
+    return summary
+
+
+@ app.get("/linesummary")
+def summarize(prompt: str):
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/snrspeaks/t5-one-line-summary",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(prompt),
+    )
+
+    result = output.json()
+    filter = result[0].get("generated_text")
     summary = json.dumps({"result": filter})
 
     return summary
@@ -779,6 +798,33 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/video")
+def generate(prompt: str):
+    data = {
+        "data": [prompt]
+    }
+
+    print(data)
+
+    response = requests.post("https://feizhengcong-video-stable-diffusion.hf.space/run/predict", json={
+        "data": [
+            prompt,
+        ]}).json()
+
+    print(response)
+
+    result = response["data"]
+
+    filtered = result[0].get("name")
+    # answer = json.dumps({"result": filtered})
+
+    # return answer
+
+    # return StreamingResponse(BytesIO(response.content), media_type="video/mp4")
+
+    return result
 
 
 @ app.get("/pastel")
