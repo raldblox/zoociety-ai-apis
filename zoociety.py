@@ -205,9 +205,14 @@ def summarize(prompt: str):
     positive = filter[0].get("score")
     neutral = filter[1].get("score")
     negative = filter[2].get("score")
+    list = [positive, negative, neutral]
+    score = ["BULLISH", "BEARISH", "NEUTRAL"]
+    largest = max(list)
+    indexed = list.index(largest)
+    sentiment = score[indexed]
 
     newdata = json.dumps(
-        {"positive": positive, "nuetral": neutral, "negative":  negative})
+        {"result": sentiment, "positive": positive, "negative":  negative, "nuetral": neutral})
 
     return newdata
 
