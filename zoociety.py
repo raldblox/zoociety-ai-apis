@@ -219,7 +219,7 @@ def summarize(prompt: str):
     indexed = list.index(largest)
 
     newdata = json.dumps(
-        {"result": f"Financial Sentiment: {top}; Sentiment Rating: {list[indexed] * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
+        {"result": f"Financial Sentiment: {top}; Rating: {list[indexed] * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
 
     return newdata
 
