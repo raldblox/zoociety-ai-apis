@@ -117,14 +117,16 @@ def checkGrammar(prompt: str):
     result = output.json()
     filter = result[0]
     positive = filter[0].get("score")
-    negative = filter[1].get("score")
-    list = [positive, negative]
-    score = ["GOOD", "BAD"]
-    largest = max(list)
-    indexed = list.index(largest)
-    sentiment = score[indexed]
+    label = filter[0].get("label")
+    def sentiment():
+        if label == "LABEL_1":
+            return "BAD"
+        else:
+            return "GOOD"
+        
+    stat = sentiment();
     newdata = json.dumps(
-        {"result": f"Grammar Rating: {positive * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative})
+        {"result": f"Grammar Rating: {positive * 100}% {stat}; Prompt: {prompt}"})
 
     return newdata
 
