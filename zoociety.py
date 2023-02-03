@@ -118,7 +118,13 @@ def checkGrammar(prompt: str):
     filter = result[0]
     positive = filter[0].get("score")
     negative = filter[1].get("score")
-    newdata = json.dumps({"positive": positive, "negative":  negative})
+    list = [positive, negative]
+    score = ["GOOD", "BAD"]
+    largest = max(list)
+    indexed = list.index(largest)
+    sentiment = score[indexed]
+    newdata = json.dumps(
+        {"result": f"Grammar Rating: {positive * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative})
 
     return newdata
 
@@ -212,7 +218,7 @@ def summarize(prompt: str):
     sentiment = score[indexed]
 
     newdata = json.dumps(
-        {"result": sentiment, "positive": positive, "negative":  negative, "nuetral": neutral})
+        {"result": f"Sentiment: {sentiment}; Rating: {positive * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
 
     return newdata
 
@@ -232,10 +238,24 @@ def summarize(prompt: str):
     )
 
     result = output.json()
-    # filter = result[0].get("summary_text")
-    # summary = json.dumps({"result": filter})
+    filter = result[0]
+    toplang = filter[0].get("label").upper()
+    positive = filter[0].get("score")
+    neutral = filter[1].get("score")
+    negative = filter[2].get("score")
+    list = []
+    for i in range(20):
+        list.append(filter[i].get("score"))
+    score = ["arabic", "bulgarian", "german", "modern greek", "english", "spanish", "french", "hindi", "italian",
+             "japanese", "dutch", "polish", "portuguese", "russian", "swahili", "thai", "turkish", "urdu", "vietnamese", "chinese"]
+    largest = max(list)
+    indexed = list.index(largest)
+    sentiment = score[indexed]
 
-    return result
+    newdata = json.dumps(
+        {"result": f"Language: {toplang}; Rating: {positive * 100}%; Prompt: {prompt}"})
+
+    return newdata
 
 
 @ app.get("/linesummary")
@@ -337,7 +357,7 @@ def gpt(prompt: str):
 #     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
-@app.get("/dialog")
+@ app.get("/dialog")
 def chat(lastInput: str, lastResponse: str, newInput: str):
 
     data = ({
@@ -363,7 +383,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
     return answer
 
 
-@app.get("/dialog2")
+@ app.get("/dialog2")
 def chat(lastInput: str, lastResponse: str, newInput: str):
 
     data = ({
@@ -388,7 +408,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
     return answer
 
 
-@app.get("/dialog3")
+@ app.get("/dialog3")
 def chat(lastInput: str, lastResponse: str, newInput: str):
 
     data = ({
@@ -413,7 +433,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
     return answer
 
 
-@app.get("/chat")
+@ app.get("/chat")
 def chat(prompt: str):
     data = ({
         "inputs": prompt,
@@ -480,7 +500,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
     return answer
 
 
-@app.get("/cotlin")
+@ app.get("/cotlin")
 def chat(prompt: str):
     data = ({
         "inputs": {
