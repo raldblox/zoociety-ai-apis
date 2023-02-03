@@ -187,9 +187,9 @@ def summarize(prompt: str):
 
     result = output.json()
     # filter = result[0].get("summary_text")
-    # summary = json.dumps({"result": filter})
+    summary = json.dumps({"result": result})
 
-    return result
+    return summary
 
 
 @ app.get("/finsentiment")
@@ -207,7 +207,9 @@ def summarize(prompt: str):
     )
 
     result = output.json()
+    print(result)
     filter = result[0]
+    top = filter[0].get("label").upper()
     positive = filter[0].get("score")
     neutral = filter[1].get("score")
     negative = filter[2].get("score")
@@ -215,10 +217,9 @@ def summarize(prompt: str):
     score = ["BULLISH", "BEARISH", "NEUTRAL"]
     largest = max(list)
     indexed = list.index(largest)
-    sentiment = score[indexed]
 
     newdata = json.dumps(
-        {"result": f"Financial Sentiment: {sentiment}; Sentiment Rating: {list[indexed] * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
+        {"result": f"Financial Sentiment: {top}; Sentiment Rating: {list[indexed] * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
 
     return newdata
 
