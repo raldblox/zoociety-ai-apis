@@ -212,17 +212,22 @@ def summarize(prompt: str):
     result = output.json()
     print(result)
     filter = result[0]
-    top = filter[0].get("label").upper()
-    positive = filter[0].get("score")
-    neutral = filter[1].get("score")
-    negative = filter[2].get("score")
-    list = [positive, negative, neutral]
-    score = ["BULLISH", "BEARISH", "NEUTRAL"]
-    largest = max(list)
-    indexed = list.index(largest)
+    top = filter[0].get("score")
+    label = filter[0].get("label")
 
+    def sentiment():
+        if label == "positive":
+            return "BULLISH"
+        elif label == "negative":
+            return "BEARISH"
+        elif label == "neutral":
+            return "NEUTRAL"
+        else:
+            return "Uhm. Please try again."
+
+    stat = sentiment()
     newdata = json.dumps(
-        {"result": f"Financial Sentiment: {top}; Rating: {list[indexed] * 100}%; Prompt: {prompt}", "positive": positive, "negative":  negative, "nuetral": neutral})
+        {"result": f"Financial Sentiment: {top * 100}% {stat}; Prompt: {prompt}"})
 
     return newdata
 
