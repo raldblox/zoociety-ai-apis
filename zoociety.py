@@ -587,9 +587,11 @@ def mask(prompt: str):
         data=json.dumps(prompt),
     )
 
-    print(output.content)
+    result = output.json()
+    filtered = result[0].get("sequence")
+    answer = json.dumps({"result": filtered})
 
-    return output.content
+    return answer
 
 
 @ app.get("/waifu")
