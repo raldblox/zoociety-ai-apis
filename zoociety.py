@@ -508,6 +508,28 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     return answer
 
+@ app.get("/conversational3")
+def chat(lastInput: str, lastResponse: str, newInput: str):
+    data = ({
+        "inputs": {
+            "past_user_inputs": [lastInput],
+            "generated_responses": [lastResponse],
+            "text": newInput
+        },
+    })
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/allenai/cosmo-xl",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result.get("generated_text")
+    answer = json.dumps({"result": filtered})
+
+    return answer
+
 
 @ app.get("/cotlin")
 def chat(prompt: str):
