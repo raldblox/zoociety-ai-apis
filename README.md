@@ -26,3 +26,7 @@ return the `image`
 
 summarization
 return the `summary`
+
+text to audio
+haoheliu/audioldm-text-to-audio-generation
+

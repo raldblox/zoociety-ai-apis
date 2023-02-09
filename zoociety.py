@@ -78,6 +78,26 @@ def image(prompt: str):
 
     return caption
 
+@ app.get("/bio")
+def checkGrammar(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/microsoft/BioGPT-Large",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filter = result[0].get("generated_text")
+    caption = json.dumps({"result": filter})
+
+    return caption
+
 
 @ app.get("/grammar")
 def checkGrammar(prompt: str):
@@ -960,6 +980,20 @@ def generate(prompt: str):
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
+@ app.get("/anime3")
+def generate(prompt: str):
+    data = {
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    }
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/gsdf/Counterfeit-V2.5",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 @ app.get("/cyberanime")
 def generate(prompt: str):
