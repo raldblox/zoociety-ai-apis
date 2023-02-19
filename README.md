@@ -30,3 +30,17 @@ return the `summary`
 text to audio
 haoheliu/audioldm-text-to-audio-generation
 
+AUTOMATIC1111
+
+hakurei/waifu-diffusion-v1-3
+ckpt/anything-v3-vae-swapped
+nitrosocke/mo-di-diffusion ----modern disney style
+nitrosocke/Arcane-Diffusion ----arcane style
+nitrosocke/spider-verse-diffusion ----spiderverse style
+
+
+PROMPTIST
+
+Gustavosta/MagicPrompt-Dalle
+Gustavosta/MagicPrompt-Stable-Diffusion
+

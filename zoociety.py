@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "Zoociety AI"}
+    return {"message": "Zoociety AI", "API Docs": "https://api.zoociety.xyz/docs#"}
 
 
 API_TOKEN = "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"
@@ -60,6 +60,27 @@ def chat(prompt: str):
     return answer
 
 
+@app.get("/promptimize2")
+def chat(prompt: str):
+    data = ({
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+    })
+
+    output = requests.request(
+        "POST",
+        "https://api-inference.huggingface.co/models/Gustavosta/MagicPrompt-Stable-Diffusion",
+        headers={"Authorization": f"Bearer {API_TOKEN}"},
+        data=json.dumps(data),
+    )
+
+    result = output.json()
+    filtered = result[0].get("generated_text")
+    answer = json.dumps({"result": filtered})
+
+    return answer
+
+
 @ app.get("/imagecaption")
 def image(prompt: str):
     img = urlopen(prompt).read()
@@ -77,6 +98,7 @@ def image(prompt: str):
     caption = json.dumps({"result": filter})
 
     return caption
+
 
 @ app.get("/bio")
 def checkGrammar(prompt: str):
@@ -528,6 +550,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
     return answer
 
+
 @ app.get("/conversational3")
 def chat(lastInput: str, lastResponse: str, newInput: str):
     data = ({
@@ -553,6 +576,7 @@ def chat(lastInput: str, lastResponse: str, newInput: str):
 
 @ app.get("/cotlin")
 def chat(prompt: str):
+
     data = ({
         "inputs": {
             "question": prompt,
@@ -980,6 +1004,7 @@ def generate(prompt: str):
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
+
 @ app.get("/anime3")
 def generate(prompt: str):
     data = {
@@ -994,6 +1019,7 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
 
 @ app.get("/cyberanime")
 def generate(prompt: str):
@@ -1116,3 +1142,17 @@ def generate(prompt: str):
     )
 
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
+
+
+@ app.get("/news")
+def fetch():
+    url = "https://crypto-news16.p.rapidapi.com/news/all"
+
+    headers = {
+        "X-RapidAPI-Key": "0ae60e3009mshf0eb60346c899dfp11006cjsn0a75f7640039",
+        "X-RapidAPI-Host": "crypto-news16.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers)
+
+    return response.text
