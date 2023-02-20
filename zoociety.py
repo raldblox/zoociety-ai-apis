@@ -11,7 +11,7 @@ from urllib.request import urlopen
 app = FastAPI()
 
 origins = [
-    "https://www.zoociety.xyz"
+    "https://www.zoociety.xyz",
     "http://zoociety.xyz",
     "https://zoociety.xyz",
     "http://localhost",
