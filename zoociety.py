@@ -269,7 +269,7 @@ def summarize(prompt: str):
 
     stat = sentiment()
     newdata = json.dumps(
-        {"result": f"{stat} by {top * 100}%", "verdict": {stat}})
+        {"result": f"{stat} by {top * 100}%", "verdict": f"{stat}"})
 
     return newdata
 
