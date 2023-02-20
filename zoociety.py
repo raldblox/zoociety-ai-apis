@@ -169,7 +169,7 @@ def checkGrammar(prompt: str):
 
     stat = sentiment()
     newdata = json.dumps(
-        {"result": f"Grammar Rating: {positive * 100}% {stat}; Prompt: {prompt}", "verdict": {stat}})
+        {"result": f"Grammar Rating: {positive * 100}% {stat}; Prompt: {prompt}"})
 
     return newdata
 
@@ -269,7 +269,7 @@ def summarize(prompt: str):
 
     stat = sentiment()
     newdata = json.dumps(
-        {"result": f"{stat} by {top * 100}%"})
+        {"result": f"{stat} by {top * 100}%", "verdict": {stat}})
 
     return newdata
 
