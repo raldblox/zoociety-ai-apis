@@ -16,7 +16,9 @@ origins = [
     "https://zoociety.xyz",
     "http://localhost",
     "http://localhost:3000",
-    "https://lilfarmboy.xyz"
+    "https://lilfarmboy.xyz",
+    "http://www.zoociety.xyz",
+    "https://www.zoociety.xyz/news/market"
 ]
 
 app.add_middleware(
