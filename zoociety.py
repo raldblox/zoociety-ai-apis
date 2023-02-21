@@ -1151,9 +1151,9 @@ def fetch():
     url = "https://crypto-news16.p.rapidapi.com/news/all"
 
     headers = {
-        "X-RapidAPI-Key": "0ae60e3009mshf0eb60346c899dfp11006cjsn0a75f7640039",
-        "X-RapidAPI-Host": "crypto-news16.p.rapidapi.com"
-    }
+	"X-RapidAPI-Key": "e26204cde8msh6adc5dc94961165p183eccjsn8bcc9365c607",
+	"X-RapidAPI-Host": "crypto-news16.p.rapidapi.com"
+}
 
     response = requests.request("GET", url, headers=headers)
 
