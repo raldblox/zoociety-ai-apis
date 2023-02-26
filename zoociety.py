@@ -18,7 +18,8 @@ origins = [
     "http://localhost:3000",
     "https://lilfarmboy.xyz",
     "http://www.zoociety.xyz",
-    "https://www.zoociety.xyz/news/market"
+    "https://www.zoociety.xyz/news/market",
+    "chrome-extension://cnjfidnpmlimiohkbbmjiamdmbgjokij"
 ]
 
 app.add_middleware(
@@ -1146,15 +1147,15 @@ def generate(prompt: str):
     return StreamingResponse(BytesIO(output.content), media_type="image/png")
 
 
-@ app.get("/news")
-def fetch():
-    url = "https://crypto-news16.p.rapidapi.com/news/all"
+# @ app.get("/news")
+# def fetch():
+#     url = "https://crypto-news16.p.rapidapi.com/news/all"
 
-    headers = {
-	"X-RapidAPI-Key": "e26204cde8msh6adc5dc94961165p183eccjsn8bcc9365c607",
-	"X-RapidAPI-Host": "crypto-news16.p.rapidapi.com"
-}
+#     headers = {
+#         "X-RapidAPI-Key": "e26204cde8msh6adc5dc94961165p183eccjsn8bcc9365c607",
+#         "X-RapidAPI-Host": "crypto-news16.p.rapidapi.com"
+#     }
 
-    response = requests.request("GET", url, headers=headers)
+#     response = requests.request("GET", url, headers=headers)
 
-    return response.text
+#     return response.text
