@@ -1159,3 +1159,19 @@ def generate(prompt: str):
 #     response = requests.request("GET", url, headers=headers)
 
 #     return response.text
+
+@ app.get("/coin")
+def fetch():
+    url = "https://coinranking1.p.rapidapi.com/coins"
+    querystring = {"referenceCurrencyUuid": "yhjMzLPhuIDl", "timePeriod": "24h",
+                   "tiers[0]": "1", "orderBy": "marketCap", "orderDirection": "desc", "limit": "50", "offset": "0"}
+
+    headers = {
+        "X-RapidAPI-Key": "6167fc676dmsh3b6c8587105d12fp1b40a2jsnb63c1aef3c0f",
+        "X-RapidAPI-Host": "coinranking1.p.rapidapi.com"
+    }
+
+    response = requests.request(
+        "GET", url, headers=headers, params=querystring)
+
+    return response.text
