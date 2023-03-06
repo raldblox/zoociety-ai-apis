@@ -19,7 +19,8 @@ origins = [
     "https://lilfarmboy.xyz",
     "http://www.zoociety.xyz",
     "https://www.zoociety.xyz/news/market",
-    "chrome-extension://cnjfidnpmlimiohkbbmjiamdmbgjokij"
+    "chrome-extension://cnjfidnpmlimiohkbbmjiamdmbgjokij",
+    "chrome-extension://aoafjgbikcchapkgagfjbgokkfnknhfd"
 ]
 
 app.add_middleware(
