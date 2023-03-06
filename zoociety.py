@@ -925,7 +925,7 @@ def generate(prompt: str):
 @ app.get("/image")
 def generate(prompt: str):
     data = {
-        "inputs": prompt,
+        "inputs": f"{prompt}, 4k, detailed, high-quality, artstation",
         "options": {"wait_for_model": True},
     }
     output = requests.request(
@@ -941,7 +941,7 @@ def generate(prompt: str):
 @ app.get("/imagepro")
 def generate(prompt: str):
     data = {
-        "inputs": prompt,
+        "inputs": f"{prompt}, 4k, detailed, high-quality, artstation",
         "options": {"wait_for_model": True},
     }
     output = requests.request(
